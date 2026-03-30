@@ -1,0 +1,48 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env
+.env.*
+*.env
+
+# Bytecode
+*.pyo
+*.pyd
+
+
+# Local config files
+config.yaml
+env.yaml
+secrets.yaml
+
+# Logs
+*.log
+logs/
+
+# Temp files
+tmp/
+temp/
+
+# Packaging / Build
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Docker
+docker-cache/
+.dockerignore
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
