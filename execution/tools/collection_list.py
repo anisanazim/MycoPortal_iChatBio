@@ -1,0 +1,24 @@
+from __future__ import annotations
+
+from mycoportal_agent.execution.tools.common import create_json_artifact
+from mycoportal_agent.models.params import CollectionListParams
+
+
+async def run_collection_list(context, api, params: CollectionListParams) -> None:
+    async with context.begin_process("MycoPortal collection listing") as process:
+        await process.log(
+            "Search parameters",
+            data=params.model_dump(exclude_none=True),
+        )
+
+        url = api.build_collection_list_url(params)
+        await process.log("API URL", data={"url": url})
+        payload = await api.get_json(url)
+        await create_json_artifact(
+            process,
+            description="MycoPortal collections",
+            url=url,
+            payload=payload,
+            metadata={"search_params": params.model_dump(exclude_none=True)},
+        )
+        await context.reply("Collection listing completed. Results are available in the artifact.")
