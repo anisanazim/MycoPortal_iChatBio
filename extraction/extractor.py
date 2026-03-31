@@ -6,7 +6,7 @@ import instructor
 from instructor.exceptions import InstructorRetryException
 from openai import AsyncOpenAI
 
-from mycoportal_agent.extraction.models import (
+from extraction.models import (
     CollectionListExtraction,
     ExtractionResult,
     MediaLookupExtraction,
@@ -15,7 +15,7 @@ from mycoportal_agent.extraction.models import (
     TaxonByIdExtraction,
     TaxonomySearchExtraction,
 )
-from mycoportal_agent.planning.models import PlannerOutput
+from planning.models import PlannerOutput
 
 logger = logging.getLogger(__name__)
 
@@ -54,9 +54,6 @@ Extract only parameters required by the given schema.
 - taxonomy_search requires taxon term
 - Keep taxon/species terms exactly as user wrote them
 
-## READ-ONLY
-
-- This extractor supports only read-only intents already selected by the planner
 """
 
 
