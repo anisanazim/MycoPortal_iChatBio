@@ -1,18 +1,9 @@
-"""MycoPortal Agent HTTP server entrypoint."""
-
 import sys
 import os
 import logging
-
-# Path guard: ensure repo root is in sys.path when running from package folder
-if __package__ is None:
-    # Running as: cd mycoportal_agent; python server.py
-    repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    if repo_root not in sys.path:
-        sys.path.insert(0, repo_root)
-
 from ichatbio.server import run_agent_server
-from mycoportal_agent.agent import get_agent
+from agent import get_agent
+from typing import Optional
 
 logging.basicConfig(
     level=logging.INFO,

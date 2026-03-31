@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mycoportal_agent.extraction.models import ExtractionResult
-from mycoportal_agent.resolution.models import ResolutionResult
+from extraction.models import ExtractionResult
+from resolution.models import ResolutionResult
 
 
 class MycoPortalResolver:

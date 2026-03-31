@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from mycoportal_agent.extraction.models import (
+from extraction.models import (
     CollectionListExtraction,
     ExtractionResult,
     MediaLookupExtraction,
@@ -9,7 +9,7 @@ from mycoportal_agent.extraction.models import (
     TaxonByIdExtraction,
     TaxonomySearchExtraction,
 )
-from mycoportal_agent.models.params import (
+from models.params import (
     CollectionListParams,
     MediaLookupParams,
     OccurrenceByIdParams,
@@ -17,8 +17,8 @@ from mycoportal_agent.models.params import (
     TaxonByIdParams,
     TaxonomySearchParams,
 )
-from mycoportal_agent.planning.models import PlannerOutput
-from mycoportal_agent.resolution.models import ResolutionResult
+from planning.models import PlannerOutput
+from resolution.models import ResolutionResult
 
 
 class MycoPortalRouter:
