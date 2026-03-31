@@ -33,6 +33,44 @@ The agent accepts a natural-language query and runs a five-stage pipeline:
 - execution/: tool handlers and execution orchestration
 - models/: typed API parameter models
 
+MycoPortal_iChatBio/
+│
+├── agent.py                 # Main MycoPortal agent definition (planner, extractor, resolver, etc.)
+├── server.py                # HTTP server entrypoint (runs the agent on port 9998)
+├── requirements.txt         # Python dependencies
+├── env.yaml                 # Environment configuration (API keys, endpoints)
+├── README.md                # Project documentation
+├── .gitignore               # Git ignore rules
+├── __init__.py              # Marks repo root as a Python package
+│
+├── common/                  # Shared utilities (config loader, helpers)
+│   └── config.py
+│
+├── client/                  # MycoPortal API client
+│   └── api.py
+│
+├── planning/                # Intent classification + tool planning
+│   ├── planner.py
+│   └── models.py
+│
+├── extraction/              # Extractor schemas + field extraction logic
+│   ├── extractor.py
+│   └── models.py
+│
+├── resolution/              # Resolver for final agent responses
+│   └── resolver.py
+│
+├── routing/                 # Router that maps user queries → planner/extractor/executor
+│   └── router.py
+│
+├── execution/               # Tool execution layer (API calls, data fetch, transformations)
+│   └── executor.py
+│
+├── models/                  # Shared Pydantic models (occurrence, taxon, images, etc.)
+│   └── *.py
+│
+└── __pycache__/             # Python cache (ignored)
+
 ## Requirements
 
 - Python 3.10+
