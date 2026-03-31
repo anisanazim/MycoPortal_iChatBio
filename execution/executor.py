@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-from mycoportal_agent.execution.tools.collection_list import run_collection_list
-from mycoportal_agent.execution.tools.media_lookup import run_media_lookup
-from mycoportal_agent.execution.tools.occurrence_by_id import run_occurrence_by_id
-from mycoportal_agent.execution.tools.occurrence_search import run_occurrence_search
-from mycoportal_agent.execution.tools.taxon_by_id import run_taxon_by_id
-from mycoportal_agent.execution.tools.taxonomy_search import run_taxonomy_search
-from mycoportal_agent.models.params import (
+from execution.tools.collection_list import run_collection_list
+from execution.tools.media_lookup import run_media_lookup
+from execution.tools.occurrence_by_id import run_occurrence_by_id
+from execution.tools.occurrence_search import run_occurrence_search
+from execution.tools.taxon_by_id import run_taxon_by_id
+from execution.tools.taxonomy_search import run_taxonomy_search
+from models.params import (
     CollectionListParams,
     MediaLookupParams,
     OccurrenceByIdParams,
@@ -14,7 +14,7 @@ from mycoportal_agent.models.params import (
     TaxonByIdParams,
     TaxonomySearchParams,
 )
-from mycoportal_agent.planning.models import PlannerOutput
+from planning.models import PlannerOutput
 
 
 class MycoPortalExecutor:

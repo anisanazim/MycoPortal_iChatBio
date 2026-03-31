@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mycoportal_agent.execution.tools.common import create_json_artifact
-from mycoportal_agent.models.params import OccurrenceByIdParams
+from execution.tools.common import create_json_artifact
+from models.params import OccurrenceByIdParams
 
 
 async def run_occurrence_by_id(context, api, params: OccurrenceByIdParams) -> None:

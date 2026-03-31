@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from mycoportal_agent.execution.tools.common import create_json_artifact
-from mycoportal_agent.models.params import CollectionListParams
+from execution.tools.common import create_json_artifact
+from models.params import CollectionListParams
 
 
 async def run_collection_list(context, api, params: CollectionListParams) -> None:
