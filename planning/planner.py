@@ -5,8 +5,8 @@ import logging
 import instructor
 from openai import AsyncOpenAI
 
-from mycoportal_agent.planning.models import PlannerOutput, ToolPlan
-from mycoportal_agent.planning.registry import registry
+from planning.models import PlannerOutput, ToolPlan
+from planning.registry import registry
 
 logger = logging.getLogger(__name__)
 
