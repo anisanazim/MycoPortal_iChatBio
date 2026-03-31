@@ -7,7 +7,7 @@ from urllib.parse import urlencode
 import requests
 
 from common.config import get_config_value
-from mycoportal_agent.models.params import (
+from models.params import (
     CollectionListParams,
     MediaLookupParams,
     OccurrenceByIdParams,

@@ -1,24 +1,18 @@
-"""MycoPortal Agent - IChatBioAgent orchestrating five-stage pipeline."""
-
-import asyncio
-import logging
-from typing import Optional
-from pydantic import BaseModel, Field
-
-from openai import AsyncOpenAI
-from typing_extensions import override
-
 from ichatbio.agent import IChatBioAgent
 from ichatbio.agent_response import ResponseContext
 from ichatbio.types import AgentCard, AgentEntrypoint
-
+import logging
+from typing import Optional
+from openai import AsyncOpenAI
+from typing_extensions import override
 from common.config import get_config_value
-from mycoportal_agent.planning.planner import MycoPortalPlanner
-from mycoportal_agent.extraction.extractor import MycoPortalExtractor
-from mycoportal_agent.resolution.resolver import MycoPortalResolver
-from mycoportal_agent.routing.router import MycoPortalRouter
-from mycoportal_agent.execution.executor import MycoPortalExecutor
-from mycoportal_agent.client.api import MycoPortalAPI
+from pydantic import BaseModel, Field
+from planning.planner import MycoPortalPlanner
+from extraction.extractor import MycoPortalExtractor
+from resolution.resolver import MycoPortalResolver
+from routing.router import MycoPortalRouter
+from execution.executor import MycoPortalExecutor
+from client.api import MycoPortalAPI
 
 logger = logging.getLogger(__name__)
 
