@@ -34,19 +34,12 @@ class MycoPortalAgent(IChatBioAgent):
 
     def __init__(self):
         """Initialize agent with five-stage pipeline (deferred OpenAI if no key)."""
-        import os
         self.logger = logger
 
-        repo_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        original_cwd = os.getcwd()
-        os.chdir(repo_root)
-        try:
-            # Defer OpenAI initialization until we know key exists
-            api_key = get_config_value("OPENAI_API_KEY")
-            base_url = get_config_value("OPENAI_BASE_URL", "https://api.openai.com/v1")
-            self._llm_ready = bool(api_key)
-        finally:
-            os.chdir(original_cwd)
+        # Defer OpenAI initialization until we know key exists
+        api_key = get_config_value("OPENAI_API_KEY")
+        base_url = get_config_value("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        self._llm_ready = bool(api_key)
 
         openai_client = None
         if self._llm_ready:
