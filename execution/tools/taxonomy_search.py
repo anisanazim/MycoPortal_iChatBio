@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from execution.tools.common import create_json_artifact
+from execution.tools.common import build_artifact_description, create_json_artifact
 from models.params import TaxonomySearchParams
 
 
@@ -16,7 +16,11 @@ async def run_taxonomy_search(context, api, params: TaxonomySearchParams) -> Non
         payload = await api.get_json(url)
         await create_json_artifact(
             process,
-            description=f"MycoPortal taxonomy search: {params.taxon}",
+            description=build_artifact_description(
+                "MycoPortal taxonomy search",
+                request_summary=f"{params.taxon} ({params.type})",
+                payload=payload,
+            ),
             url=url,
             payload=payload,
             metadata={"taxon": params.taxon, "search_type": params.type},

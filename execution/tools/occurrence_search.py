@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from execution.tools.common import create_json_artifact
+from execution.tools.common import build_artifact_description, create_json_artifact
 from models.params import OccurrenceSearchParams
 
 
@@ -21,9 +21,26 @@ async def run_occurrence_search(context, api, params: OccurrenceSearchParams) ->
 
         await process.log(f"Found {total:,} total records, returning {returned}")
 
+        request_summary = ", ".join(
+            part
+            for part in [
+                f"species {params.sciname}" if params.sciname else None,
+                f"family {params.family}" if params.family else None,
+                f"state {params.stateProvince}" if params.stateProvince else None,
+                f"country {params.country}" if params.country else None,
+                f"recorded by {params.recordedBy}" if params.recordedBy else None,
+                f"date {params.eventDate}" if params.eventDate else None,
+            ]
+            if part
+        ) or None
+
         await create_json_artifact(
             process,
-            description="MycoPortal occurrence search results",
+            description=build_artifact_description(
+                "MycoPortal occurrence search results",
+                request_summary=request_summary,
+                payload=payload,
+            ),
             url=url,
             payload=payload,
             metadata={"total_matches": total, "search_params": params.model_dump(exclude_none=True)},
