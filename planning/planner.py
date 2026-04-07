@@ -46,13 +46,19 @@ Your job:
 **Clarification:**
 - Ask clarification only when required identifiers or search terms are missing
 - Keep clarification question specific and short
+- If the request clearly matches a supported intent but is missing parameters, keep that intent and set clarification_needed=True
+- Do not use "out_of_scope" only because an identifier/search term is missing
 
 **Read-only scope:**
 - This agent is read-only
 - Any create/update/delete request is out_of_scope
 
 **Reasoning:**
-- Provide at least one sentence explaining tool choice
+- Provide 1-2 concise sentences explaining tool choice
+- State the user's intent in plain language
+- Explain why the selected tool matches the request and what it retrieves
+- Prefer concrete references to the query terms and tool capabilities over vague phrases
+
 """
 
 
