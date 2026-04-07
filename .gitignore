@@ -27,6 +27,11 @@ logs/
 tmp/
 temp/
 
+# Evaluation artifacts
+allure-results/
+allure-report/
+.deepeval/
+
 # Packaging / Build
 build/
 dist/
