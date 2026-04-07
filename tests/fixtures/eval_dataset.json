@@ -1,0 +1,69 @@
+[
+  {
+    "id": "taxonomy_aspergillus_start",
+    "query": "Search taxonomy for names starting with Aspergillus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon", "type"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "occurrence_florida_ganoderma",
+    "query": "Find Ganoderma occurrences in Florida",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["sciname", "stateProvince"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_by_taxon_id",
+    "query": "Lookup media for taxon id 388665",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "collection_live_specimens",
+    "query": "Show me 50 live preserved-specimen collections starting from record 100",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id",
+    "query": "Get taxon 388665",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_by_id_missing_identifier",
+    "query": "Get occurrence by id",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": true,
+    "expected_clarification_needed": true,
+    "failure_reason": "Missing identifier should trigger clarification"
+  },
+  {
+    "id": "negative_expected_failure_intent",
+    "query": "Lookup media for taxon id 388665",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": [],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail": true,
+    "failure_reason": "Intent is intentionally wrong to demonstrate expected failure behavior"
+  }
+]
