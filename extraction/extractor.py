@@ -42,17 +42,34 @@ Extract only parameters required by the given schema.
 - Do not invent fields or values
 - If a required identifier/search term is missing, set clarification_needed=True
 - If clarification_needed=True, provide a specific clarification_question
+- For occurrence_search, any single valid filter is enough to run search (species, catalog number,
+  family, recordedBy, recordedByLastName, eventDate, county, stateProvince, or country).
+- Do not set clarification_needed for occurrence_search when at least one valid filter is present.
 
 ## ID RULES
 
 - occurrence_by_id requires identifier (string)
+- For occurrence_by_id, if identifier is not in UUID format (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx),
+  set clarification_needed=True and ask user to provide UUID with hyphens.
+- For malformed catalog numbers (not like DBG-F-010127), set clarification_needed=True and suggest a corrected dashed format.
 - taxon_by_id requires identifier (integer tid)
 - media_lookup may include tid (integer) if present
 
 ## TAXON RULES
 
 - taxonomy_search requires taxon term
-- Keep taxon/species terms exactly as user wrote them
+- taxonomy_search search_type mapping:
+    - Use START for phrases like "start with", "starting with", "begins with", "prefix"
+    - Use WHOLEWORD for phrases like "whole word", "exact word", "word <term>"
+    - Use WILD for contains/pattern phrasing such as "contains", "include", "anything with",
+        "in the name", "matching pattern", or when wildcard characters like * or ? appear
+    - Use EXACT only for direct lookup/classification phrasing without prefix/wholeword/wildcard hints
+- Do not default taxonomy_search search_type to EXACT when query wording implies START, WHOLEWORD, or WILD
+- Keep taxon/species terms exactly as user wrote them unless normalization is required
+- occurrence_search uses binomen-only scientific names, catalog numbers, collector names, and location/date filters
+- occurrence_search catalog numbers look like DBG-F-010127
+- occurrence_search event dates must be YYYY, YYYY-MM, or YYYY-MM-DD
+- occurrence_search county must be a single county name
 
 """
 
