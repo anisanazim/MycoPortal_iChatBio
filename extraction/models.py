@@ -13,9 +13,12 @@ class ExtractionBase(BaseModel):
 class OccurrenceSearchExtraction(ExtractionBase):
     species: Optional[str] = None
     state_province: Optional[str] = None
+    county: Optional[str] = None
     country: Optional[str] = None
     family: Optional[str] = None
+    catalog_number: Optional[str] = None
     recorded_by: Optional[str] = None
+    recorded_by_last_name: Optional[str] = None
     event_date: Optional[str] = None
     limit: int = 100
     offset: int = 0
