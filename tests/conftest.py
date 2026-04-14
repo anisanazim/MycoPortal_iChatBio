@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import json
+import os
 from pathlib import Path
 import sys
 
@@ -18,12 +18,40 @@ from extraction.extractor import MycoPortalExtractor
 from planning.planner import MycoPortalPlanner
 from resolution.resolver import MycoPortalResolver
 from routing.router import MycoPortalRouter
+from tests.data.loader import load_dataset
+
+
+def pytest_addoption(parser):
+    parser.addoption(
+        "--dataset-mode",
+        action="store",
+        default=None,
+        choices=["smoke", "endpoint", "regression"],
+        help="Dataset mode: smoke (eval_dataset), endpoint (single endpoint file), regression (all endpoint files)",
+    )
+    parser.addoption(
+        "--endpoint",
+        action="store",
+        default=None,
+        help="Endpoint name for --dataset-mode=endpoint (e.g. taxonomy_search)",
+    )
+
+
+def pytest_configure(config):
+    dataset_mode = config.getoption("dataset_mode")
+    endpoint = config.getoption("endpoint")
+
+    if dataset_mode:
+        os.environ["MYCO_TEST_MODE"] = dataset_mode
+    if endpoint:
+        os.environ["MYCO_TEST_ENDPOINT"] = endpoint
 
 
 @pytest.fixture(scope="session")
 def eval_dataset() -> list[dict[str, object]]:
-    dataset_path = Path(__file__).parent / "fixtures" / "eval_dataset.json"
-    return json.loads(dataset_path.read_text(encoding="utf-8"))
+    mode = os.getenv("MYCO_TEST_MODE", "smoke")
+    endpoint = os.getenv("MYCO_TEST_ENDPOINT")
+    return load_dataset(mode=mode, endpoint=endpoint)
 
 
 @pytest.fixture(scope="session")
