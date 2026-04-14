@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import json
 import os
-from pathlib import Path
 
 import allure
 import pytest
 from common.config import get_config_value
+from tests.data.loader import load_dataset_from_env
 
 try:
     from deepeval.metrics import GEval
@@ -17,8 +17,11 @@ except Exception:  # pragma: no cover - handled at runtime in environments missi
     LLMTestCaseParams = None
 
 
-DATASET_PATH = Path(__file__).resolve().parents[1] / "fixtures" / "eval_dataset.json"
-DATASET = json.loads(DATASET_PATH.read_text(encoding="utf-8"))
+DATASET = load_dataset_from_env()
+DATASET_MODE = os.getenv("MYCO_TEST_MODE", "smoke")
+DATASET_ENDPOINT = os.getenv("MYCO_TEST_ENDPOINT")
+REASONING_THRESHOLD = float(os.getenv("MYCO_REASONING_THRESHOLD", "0.75"))
+EXTRACTION_THRESHOLD = float(os.getenv("MYCO_EXTRACTION_THRESHOLD", "0.75"))
 QUALITY_CASES = [
     case
     for case in DATASET
@@ -28,16 +31,45 @@ QUALITY_CASES = [
 ]
 
 
-def _tool_summary(plan) -> str:
-    return "; ".join(
-        f"{tool.tool_name} ({tool.priority}): {tool.reason}" for tool in plan.tools_planned
-    ) or "No tools planned"
+def _set_allure_quality_context(case: dict[str, object], metric_bucket: str) -> None:
+    case_id = str(case.get("id", "unknown_case"))
+    expected_intent = str(case.get("expected_intent", "unknown"))
+    category = str(case.get("test_category", metric_bucket))
 
+    allure.dynamic.parent_suite("MycoPortal Evaluation")
+    allure.dynamic.suite(f"Dataset Mode: {DATASET_MODE}")
+    allure.dynamic.sub_suite("Quality DeepEval")
+    allure.dynamic.feature(f"Intent: {expected_intent}")
+    allure.dynamic.story(metric_bucket)
+    allure.dynamic.title(f"{case_id} [{metric_bucket}] ({DATASET_MODE})")
 
-def _build_metric(name: str, criteria: str, threshold: float = 0.75):
+    allure.dynamic.tag(f"dataset_mode:{DATASET_MODE}")
+    allure.dynamic.tag(f"intent:{expected_intent}")
+    allure.dynamic.tag(f"category:{category}")
+    if DATASET_ENDPOINT:
+        allure.dynamic.tag(f"dataset_endpoint:{DATASET_ENDPOINT}")
+
+    allure.attach(
+        json.dumps(
+            {
+                "case_id": case_id,
+                "metric_bucket": metric_bucket,
+                "dataset_mode": DATASET_MODE,
+                "dataset_endpoint": DATASET_ENDPOINT,
+                "expected_intent": expected_intent,
+                "category": category,
+                "query": case.get("query"),
+            },
+            indent=2,
+        ),
+        name="test_context",
+        attachment_type=allure.attachment_type.JSON,
+    )
+
+def _build_metric(name: str, evaluation_steps: list[str], threshold: float = 0.75):
     return GEval(
         name=name,
-        criteria=criteria,
+        evaluation_steps=evaluation_steps,
         evaluation_params=[
             LLMTestCaseParams.INPUT,
             LLMTestCaseParams.ACTUAL_OUTPUT,
@@ -66,11 +98,30 @@ def _measure_metric(metric, query: str, actual_output: str, expected_output: str
     return float(metric.score), str(getattr(metric, "reason", ""))
 
 
+REASONING_STEPS = [
+    "Check whether the reasoning explicitly mentions the user's request in concrete terms instead of using vague filler language.",
+    "Check whether the reasoning explains why the selected tool fits the request and the expected intent.",
+    "Check whether the reasoning references the query terms and the tool's actual capability, not an unrelated capability.",
+    "Good reasoning is short, specific, and clearly links the query to the tool choice. Bad reasoning is generic, contradictory, or missing justification entirely.",
+    "Score higher when the reasoning is grounded in the request and demonstrates correct semantic alignment.",
+]
+
+EXTRACTION_ACCURACY_STEPS = [
+    "Check whether all required parameters for the intent are present and extracted (no missing critical fields).",
+    "Check whether extracted parameter types are semantically correct (strings non-empty, integers positive where applicable, enums valid).",
+    "Check whether extracted parameters are coherent with the query and the declared intent (e.g., search terms from query, identifiers numeric).",
+    "Check whether parameter values satisfy domain constraints (e.g., limit > 0, offset >= 0, identifiers non-empty).",
+    "Score higher when all parameters are correct, complete, semantically sound, and ready for API consumption.",
+]
+
+
 @pytest.mark.asyncio
 @pytest.mark.quality
 @pytest.mark.llm
 @pytest.mark.parametrize("case", QUALITY_CASES, ids=[str(case["id"]) for case in QUALITY_CASES])
 async def test_reasoning_and_tool_quality_with_deepeval(pipeline: dict[str, object], case: dict[str, object]) -> None:
+    _set_allure_quality_context(case, "quality_reasoning")
+
     if GEval is None or LLMTestCase is None or LLMTestCaseParams is None:
         pytest.skip("DeepEval is not available in the active environment")
 
@@ -88,7 +139,6 @@ async def test_reasoning_and_tool_quality_with_deepeval(pipeline: dict[str, obje
 
     query = str(case["query"])
     expected_intent = str(case["expected_intent"])
-    expected_tool = str(case["expected_tool"])
 
     plan = await planner.plan(query)
     extraction = await extractor.extract(query, plan)
@@ -101,16 +151,14 @@ async def test_reasoning_and_tool_quality_with_deepeval(pipeline: dict[str, obje
     )
 
     expected_reasoning = (
-        f"The reasoning should justify why {expected_tool} is the right tool for this query "
+        f"The reasoning should justify the selected tool choice "
         f"and stay aligned with the {expected_intent} intent."
     )
     
     reasoning_metric = _build_metric(
         name="Reasoning Quality",
-        criteria=(
-            "Score how well the planner explains why the selected tool is appropriate for the user's query."
-        ),
-        threshold=0.60,
+        evaluation_steps=REASONING_STEPS,
+        threshold=REASONING_THRESHOLD,
     )
     reasoning_score, reasoning_reason = _measure_metric(
         reasoning_metric,
@@ -135,35 +183,72 @@ async def test_reasoning_and_tool_quality_with_deepeval(pipeline: dict[str, obje
         attachment_type=allure.attachment_type.JSON,
     )
 
-    tool_metric = _build_metric(
-        name="Tool Selection Justification",
-        criteria=(
-            "Score whether the selected tool and its justification match the user's need."
-        ),
-        threshold=0.60,
+    assert reasoning_score >= reasoning_metric.threshold
+
+
+@pytest.mark.asyncio
+@pytest.mark.quality
+@pytest.mark.llm
+@pytest.mark.parametrize("case", QUALITY_CASES, ids=[str(case["id"]) for case in QUALITY_CASES])
+async def test_extraction_parameter_accuracy_with_deepeval(pipeline: dict[str, object], case: dict[str, object]) -> None:
+    _set_allure_quality_context(case, "quality_extraction")
+
+    if GEval is None or LLMTestCase is None or LLMTestCaseParams is None:
+        pytest.skip("DeepEval is not available in the active environment")
+
+    api_key = os.getenv("OPENAI_API_KEY") or get_config_value("OPENAI_API_KEY")
+    if not api_key:
+        pytest.skip("OPENAI_API_KEY is required for DeepEval quality tests")
+    os.environ["OPENAI_API_KEY"] = api_key
+
+    base_url = os.getenv("OPENAI_BASE_URL") or get_config_value("OPENAI_BASE_URL")
+    if base_url:
+        os.environ["OPENAI_BASE_URL"] = base_url
+
+    planner = pipeline["planner"]
+    extractor = pipeline["extractor"]
+
+    query = str(case["query"])
+    expected_intent = str(case["expected_intent"])
+
+    plan = await planner.plan(query)
+    extraction = await extractor.extract(query, plan)
+
+    extraction_dict = extraction.model_dump(exclude_none=True)
+    actual_extraction_output = json.dumps(extraction_dict, indent=2)
+
+    expected_extraction = (
+        f"For intent '{expected_intent}', extraction should contain all required parameters "
+        f"with correct types and values coherent with the query: '{query}'. "
+        f"Strings must be non-empty, integers positive where applicable, and all domain constraints satisfied."
     )
-    tool_score, tool_reason = _measure_metric(
-        tool_metric,
+
+    extraction_metric = _build_metric(
+        name="Entity Extraction Accuracy",
+        evaluation_steps=EXTRACTION_ACCURACY_STEPS,
+        threshold=EXTRACTION_THRESHOLD,
+    )
+    extraction_score, extraction_reason = _measure_metric(
+        extraction_metric,
         query,
-        _tool_summary(plan),
-        f"The planner should choose {expected_tool} as the must-call tool and justify it clearly.",
+        actual_extraction_output,
+        expected_extraction,
     )
 
     allure.attach(
         json.dumps(
             {
                 "query": query,
-                "actual_output": _tool_summary(plan),
-                "expected_output": f"The planner should choose {expected_tool} as the must-call tool and justify it clearly.",
-                "score": tool_score,
-                "threshold": tool_metric.threshold,
-                "reason": tool_reason,
+                "intent": expected_intent,
+                "actual_extraction": extraction_dict,
+                "score": extraction_score,
+                "threshold": extraction_metric.threshold,
+                "reason": extraction_reason,
             },
             indent=2,
         ),
-        name="deepeval_tool_metric",
+        name="deepeval_extraction_metric",
         attachment_type=allure.attachment_type.JSON,
     )
 
-    assert reasoning_score >= reasoning_metric.threshold
-    assert tool_score >= tool_metric.threshold
+    assert extraction_score >= extraction_metric.threshold
