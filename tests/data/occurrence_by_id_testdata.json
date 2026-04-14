@@ -1,0 +1,55 @@
+[
+  {
+    "id": "occurrence_by_id_valid_uuid",
+    "query": "Show occurrence details for identifier 596a4eea-a8b9-40c5-a125-1288450fec7c",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "occurrence_by_id_invalid_uuid_no_hyphens",
+    "query": "Get occurrence by identifier 596a4eeaa8b940c5a1251288450fec7c",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail_validation": true,
+    "validation_failure_point": "param_schema_validation",
+    "failure_reason": "Identifier must include UUID hyphen separators"
+  },
+  {
+    "id": "occurrence_by_id_missing_identifier",
+    "query": "Retrieve occurrence data using a generic identifier.",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail": true,
+    "failure_reason": "Planner may classify this as out_of_scope due to missing concrete identifier"
+  },
+  {
+    "id": "occurrence_by_id_uppercase_hex",
+    "query": "Show occurrence A1B2C3D4-E5F6-47A8-B9CD-EF1A2B3C4D5E",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_by_id_invalid_missing_segment",
+    "query": "Get occurrence 596a4eea-a8b9-40c5-a125",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail_validation": true,
+    "validation_failure_point": "param_schema_validation",
+    "failure_reason": "Invalid UUID: requires 5 hyphen-separated segments"
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": "collection_list_live_specimens",
+    "query": "Show me 50 live preserved-specimen collections starting from record 100",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "collection_list_all_types",
+    "query": "Show me all live preserved-specimen collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["managementType", "collectionType"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "collection_list_pagination_first_20",
+    "query": "Show me the first 20 collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "collection_list_range",
+    "query": "List collections 50 through 100",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "collection_list_observation_only",
+    "query": "List all observation collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["collectionType"],
+    "run_functional": true,
+    "run_quality": false
+  }
+]

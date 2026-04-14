@@ -1,0 +1,143 @@
+[
+  {
+    "id": "occurrence_search_county_only",
+    "query": "Show species occurrences in Lane county",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["county"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_state_only",
+    "query": "Find fungal occurrences in Oregon",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["stateProvince"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_event_date_only",
+    "query": "Show occurrences from 2024-05",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["eventDate"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_recorded_by_only",
+    "query": "Find occurrences recorded by Jane Doe",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["recordedBy"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_catalog_number_valid",
+    "query": "Find occurrences with catalog number DBG-F-010127",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["catalogNumber"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_catalog_number_invalid_clarification",
+    "query": "Find occurrences with catalog number DBG010127",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["catalogNumber"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Catalog number missing hyphens should trigger clarification"
+  },
+  {
+    "id": "occurrence_search_sciname_with_authorship",
+    "query": "Find occurrences for Amanita muscaria (L.)",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["sciname"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Scientific name should be binomen only without authorship"
+  },
+  {
+    "id": "occurrence_search_county_multi_value_invalid",
+    "query": "Find occurrences with county 'Clear Creek, Douglas'",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["county"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Extractor should request a single county name when multiple counties are provided"
+  },
+  {
+    "id": "occurrence_search_sciname_only",
+    "query": "Find occurrence records for Leccinum scabrum",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["sciname"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "occurrence_search_country_only",
+    "query": "Find fungal occurrences in Canada",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["country"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_family_and_state",
+    "query": "Find occurrences of family Boletaceae in Washington",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["family", "stateProvince"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_full_date_iso",
+    "query": "Show occurrences from 2024-03-15",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["eventDate"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_year_only_date",
+    "query": "List all occurrences from 2023",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["eventDate"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_recorded_by_name",
+    "query": "Find specimens collected by Smith",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["recordedBy"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "occurrence_search_max_offset_out_of_range",
+    "query": "Find occurrences with offset 10000",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["offset"],
+    "run_functional": true,
+    "run_quality": false
+  }
+]

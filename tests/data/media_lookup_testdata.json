@@ -1,0 +1,49 @@
+[
+  {
+    "id": "media_lookup_by_taxon_id",
+    "query": "Lookup media for taxon id 543034",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "media_lookup_with_synonyms",
+    "query": "Show media records for taxon id 187759 including synonyms",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_lookup_with_limit",
+    "query": "Show media results with limit 10 for tid 543034",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid", "limit"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_lookup_large_limit",
+    "query": "Get 100 media items for taxon 456123",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid", "limit"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_lookup_invalid_tid_format",
+    "query": "Show media for taxon ABC123",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "tid must be numeric"
+  }
+]

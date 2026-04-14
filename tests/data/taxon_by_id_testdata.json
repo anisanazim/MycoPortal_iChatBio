@@ -1,0 +1,64 @@
+[
+  {
+    "id": "taxon_by_id_valid",
+    "query": "Get taxon 388665",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id_with_details",
+    "query": "show taxon details for id 95084",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id_non_numeric",
+    "query": "Get taxon with identifier abc123",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "taxon_by_id identifier must be numeric"
+  },
+  {
+    "id": "taxon_by_id_very_large_number",
+    "query": "Get taxon with identifier 9999999999999999999",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Extractor should request a valid integer taxon identifier for oversized values"
+  },
+  {
+    "id": "taxon_by_id_float_invalid",
+    "query": "Get taxon 123.45",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "taxon_by_id identifier cannot be a decimal number"
+  },
+  {
+    "id": "taxon_by_id_zero",
+    "query": "Get taxon 0",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Extractor should require taxon identifier as a positive integer"
+  }
+]

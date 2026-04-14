@@ -1,0 +1,241 @@
+[
+  {
+    "id": "taxonomy_aspergillus_start",
+    "query": "Search taxonomy for names starting with Aspergillus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon", "type"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "occurrence_florida_ganoderma",
+    "query": "Find Ganoderma applanatum occurrences in Florida",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["sciname", "stateProvince"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_by_taxon_id",
+    "query": "Lookup media for taxon id 388665",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "collection_live_specimens",
+    "query": "Show me 50 live preserved-specimen collections starting from record 100",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["collectionType", "limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id",
+    "query": "Get taxon 388665",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "negative_expected_failure_intent",
+    "query": "Lookup media for taxon id 388665",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": [],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail": true,
+    "failure_reason": "Intent is intentionally wrong to demonstrate expected failure behavior"
+  },
+  {
+    "id": "occurrence_amanita_muscaria_search",
+    "query": "Show occurrence records for Amanita muscaria",
+    "expected_intent": "occurrence_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["sciname"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+  "id": "occurrence_boletus_oregon_empty_results",
+  "query": "Find occurrence records for Boletus edulis in Oregon",
+  "expected_intent": "occurrence_search",
+  "expected_tool": "search_occurrences",
+  "required_params": ["sciname", "stateProvince"],
+  "run_functional": false,
+  "run_quality": false,
+  "test_category": "edge_case_empty_results",
+  "failure_reason": "Valid query, no records in MycoPortal - tests empty result handling"
+},
+{
+    "id": "occurrence_by_id_numeric",
+    "query": "Get occurrence by identifier 1253291",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+  "run_functional": false,
+  "run_quality": false,
+  "expected_clarification_needed": true,
+  "failure_reason": "Occurrence identifier must be canonical UUID format"
+  },
+  {
+    "id": "occurrence_by_id_uuid",
+    "query": "Show occurrence details for identifier b1e1f38f-2873-4d98-bf34-404dd97074d4",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "occurrence_by_id_invalid_random_identifier",
+    "query": "Show occurrence details for identifier iufg637-r4d-123",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Extractor should request a canonical UUID identifier"
+  },
+  {
+    "id": "occurrence_by_id_invalid_uuid_no_hyphens",
+    "query": "Get occurrence by identifier 596a4eeaa8b940c5a1251288450fec7c",
+    "expected_intent": "occurrence_by_id",
+    "expected_tool": "get_occurrence_by_id",
+    "required_params": ["identifier"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "failure_reason": "Extractor should request UUID with hyphen separators"
+  },
+  {
+    "id": "taxonomy_what_is_amanita",
+    "query": "what is amanita",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "taxonomy_coprinus_species",
+    "query": "what species belong to coprinus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_ganoderma_genus",
+    "query": "what kind of fungus is ganoderma",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id_95084",
+    "query": "show taxon details for id 95084",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxon_by_id_83373",
+    "query": "what species is taxon 83373",
+    "expected_intent": "taxon_by_id",
+    "expected_tool": "get_taxon_by_id",
+    "required_params": ["identifier"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "collection_live_and_preserved_specimens",
+    "query": "Show me all live preserved-specimen collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["managementType", "collectionType"],
+    "run_functional": true,
+    "run_quality": true
+  },
+ {
+  "id": "collection_observation_snapshot",
+  "query": "List snapshot collections that contain observation data",
+  "expected_intent": "collection_list",
+  "expected_tool": "list_collections",
+  "required_params": ["managementType", "collectionType"],
+  "run_functional": true,        
+  "run_quality": true,            
+  "expected_clarification_needed": false 
+ },
+ {
+    "id": "collection_pagination_first_20",
+    "query": "Show me the first 20 collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit"],
+   "run_functional": false,
+    "run_quality": false
+  },
+  {
+    "id": "collection_pagination_range",
+    "query": "List collections 50 through 100",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_lookup_taxon_id_14501",
+    "query": "Lookup media for tid 14501",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "media_lookup_with_synonyms",
+    "query": "Show media records for taxon id 187759 including synonyms",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid", "includeSynonyms"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "media_lookup_with_limit",
+    "query": "Show media results with limit 10 for tid 543034",
+    "expected_intent": "media_lookup",
+    "expected_tool": "lookup_media",
+    "required_params": ["tid", "limit"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "validation_wrong_tool_in_plan",
+    "query": "Search taxonomy for names starting with Aspergillus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_occurrences",
+    "required_params": ["taxon"],
+    "run_functional": false,
+    "run_quality": false,
+    "should_fail_validation": true,
+    "validation_failure_point": "must_call_tools_mismatch",
+    "failure_reason": "Expected tool (search_occurrences) does not match what planner selected (search_taxonomy)"
+  }
+]

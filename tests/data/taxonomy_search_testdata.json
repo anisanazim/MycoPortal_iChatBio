@@ -1,0 +1,92 @@
+[
+  {
+    "id": "taxonomy_search_exact",
+    "query": "Search taxonomy for names starting with Aspergillus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon", "type"],
+    "expected_search_type": "START",
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "taxonomy_search_what_is",
+    "query": "what is amanita",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "taxonomy_search_genus",
+    "query": "what kind of fungus is ganoderma",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_search_tricholoma_mushrooms",
+    "query": "taxonomy of tricholoma mushrooms",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_search_cantharellus_classification",
+    "query": "classification of cantharellus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_search_boletus_genus_details",
+    "query": "give me details about boletus genus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_search_boletus_edulis_classification",
+    "query": "what is boletus edulis classification",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon"],
+    "expected_search_type": "EXACT",
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "taxonomy_search_type_wholeword",
+    "query": "Find taxonomy entries with the exact word boletus",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon", "type"],
+    "expected_search_type": "WHOLEWORD",
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "taxonomy_search_type_wild",
+    "query": "Find taxonomy names containing muscaria",
+    "expected_intent": "taxonomy_search",
+    "expected_tool": "search_taxonomy",
+    "required_params": ["taxon", "type"],
+    "expected_search_type": "WILD",
+    "run_functional": true,
+    "run_quality": false
+  }
+]
