@@ -36,11 +36,15 @@ class MycoPortalRouter:
             e = self._expect(extraction, OccurrenceSearchExtraction)
             return {
                 "search_occurrences": OccurrenceSearchParams(
+                    collid=None,
                     sciname=e.species,
+                    catalogNumber=e.catalog_number,
                     stateProvince=e.state_province,
+                    county=e.county,
                     country=e.country,
                     family=e.family,
                     recordedBy=e.recorded_by,
+                    recordedByLastName=e.recorded_by_last_name,
                     eventDate=e.event_date,
                     limit=e.limit,
                     offset=e.offset,
