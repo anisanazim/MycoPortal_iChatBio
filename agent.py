@@ -6,7 +6,7 @@ from typing import Optional
 from openai import AsyncOpenAI
 from typing_extensions import override
 from common.config import get_config_value
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ValidationError
 from planning.planner import MycoPortalPlanner
 from extraction.extractor import MycoPortalExtractor
 from resolution.resolver import MycoPortalResolver
@@ -85,7 +85,7 @@ class MycoPortalAgent(IChatBioAgent):
         entrypoint: str,
         params: MycoPortalParams,
     ) -> None:
-        """Execute five-stage pipeline: Plan → Extract → Resolve → Route → Execute."""
+        """Execute five-stage pipeline: Plan → Extract → Resolve → Route → Execute"""
         try:
             if not self._llm_ready or self.planner is None or self.extractor is None:
                 await context.reply(
@@ -94,12 +94,32 @@ class MycoPortalAgent(IChatBioAgent):
                 )
                 return
 
-            query = request
+            query = (request or "").strip()
+
+            if not query:
+                await context.reply("Please provide a query in request.")
+                return
+
             self.logger.info(f"Query: {query}")
 
             # Stage 1: Planner (intent → tool selection)
             plan = await self.planner.plan(query)
             self.logger.info(f"Plan: intent={plan.intent}, tools={plan.tools_planned}")
+
+            # Planner-level clarification and non-actionable intents should return early.
+            if plan.clarification_needed:
+                await context.reply(
+                    plan.clarification_question
+                    or "Please provide a more specific query so I can help."
+                )
+                return
+
+            if plan.intent in ("unknown", "out_of_scope"):
+                await context.reply(
+                    "I can help with MycoPortal fungal data queries such as occurrence lookup, "
+                    "taxon lookup, taxonomy search, media lookup, and collection listing."
+                )
+                return
 
             # Stage 2: Extractor (query → typed parameters)
             extraction = await self.extractor.extract(query, plan)
