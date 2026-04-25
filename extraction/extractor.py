@@ -8,8 +8,10 @@ from openai import AsyncOpenAI
 
 from extraction.models import (
     CollectionListExtraction,
+    ExsiccataListExtraction,
     ExtractionResult,
     MediaLookupExtraction,
+    MorphologyListExtraction,
     OccurrenceByIdExtraction,
     OccurrenceSearchExtraction,
     TaxonByIdExtraction,
@@ -27,6 +29,8 @@ INTENT_SCHEMA_MAP: dict[str, type] = {
     "taxon_by_id": TaxonByIdExtraction,
     "collection_list": CollectionListExtraction,
     "media_lookup": MediaLookupExtraction,
+    "morphology_list": MorphologyListExtraction,
+    "exsiccata_list": ExsiccataListExtraction,
 }
 
 
@@ -54,6 +58,8 @@ Extract only parameters required by the given schema.
 - For malformed catalog numbers (not like DBG-F-010127), set clarification_needed=True and suggest a corrected dashed format.
 - taxon_by_id requires identifier (integer tid)
 - media_lookup may include tid (integer) if present
+- For media_lookup, if taxon/tid value includes non-numeric characters (e.g., ABC123),
+  set clarification_needed=True and ask for a numeric tid only.
 
 ## TAXON RULES
 
@@ -71,6 +77,18 @@ Extract only parameters required by the given schema.
 - occurrence_search event dates must be YYYY, YYYY-MM, or YYYY-MM-DD
 - occurrence_search county must be a single county name
 
+## MORPHOLOGY RULES
+
+- morphology_list is for morphological characters/traits and trait states
+- include_states mapping:
+    - Set include_states=1 when user asks for possible states/values/options of traits
+    - Otherwise default include_states=0 for character/trait listings
+- Apply limit/offset only when explicitly requested by the user
+
+## EXSICCATA RULES
+
+- exsiccata_list is for exsiccatum (dried specimen sets)
+- Apply limit/offset only when explicitly requested by the user
 """
 
 

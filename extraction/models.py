@@ -54,6 +54,17 @@ class MediaLookupExtraction(ExtractionBase):
     offset: int = 0
 
 
+class MorphologyListExtraction(ExtractionBase):
+    include_states: int = 0
+    limit: int = 100
+    offset: int = 0
+
+
+class ExsiccataListExtraction(ExtractionBase):
+    limit: int = 100
+    offset: int = 0
+
+
 ExtractionResult = Union[
     OccurrenceSearchExtraction,
     OccurrenceByIdExtraction,
@@ -61,4 +72,6 @@ ExtractionResult = Union[
     TaxonByIdExtraction,
     CollectionListExtraction,
     MediaLookupExtraction,
+    MorphologyListExtraction,
+    ExsiccataListExtraction,
 ]

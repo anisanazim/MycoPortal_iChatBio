@@ -20,6 +20,8 @@ The agent accepts a natural-language query and runs a five-stage pipeline:
 4. taxon_by_id -> GET /api/v2/taxonomy/{identifier}
 5. collection_list -> GET /api/v2/collection
 6. media_lookup -> GET /api/v2/media
+7. morphology_list -> GET /api/v2/morphology
+8. exsiccata_list -> GET /api/v2/exsiccata
 
 ## Project Layout
 

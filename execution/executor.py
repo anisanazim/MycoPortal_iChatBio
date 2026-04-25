@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 from execution.tools.collection_list import run_collection_list
+from execution.tools.exsiccata_list import run_exsiccata_list
 from execution.tools.media_lookup import run_media_lookup
+from execution.tools.morphology_list import run_morphology_list
 from execution.tools.occurrence_by_id import run_occurrence_by_id
 from execution.tools.occurrence_search import run_occurrence_search
 from execution.tools.taxon_by_id import run_taxon_by_id
 from execution.tools.taxonomy_search import run_taxonomy_search
 from models.params import (
     CollectionListParams,
+    ExsiccataListParams,
     MediaLookupParams,
+    MorphologyListParams,
     OccurrenceByIdParams,
     OccurrenceSearchParams,
     TaxonByIdParams,
@@ -108,6 +112,16 @@ class MycoPortalExecutor:
         if tool_name == "lookup_media":
             assert isinstance(params, MediaLookupParams)
             await run_media_lookup(context, self.api, params)
+            return
+
+        if tool_name == "list_morphology":
+            assert isinstance(params, MorphologyListParams)
+            await run_morphology_list(context, self.api, params)
+            return
+
+        if tool_name == "list_exsiccata":
+            assert isinstance(params, ExsiccataListParams)
+            await run_exsiccata_list(context, self.api, params)
             return
 
         raise ValueError(f"Unknown tool: {tool_name}")

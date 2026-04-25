@@ -9,7 +9,9 @@ import requests
 from common.config import get_config_value
 from models.params import (
     CollectionListParams,
+    ExsiccataListParams,
     MediaLookupParams,
+    MorphologyListParams,
     OccurrenceByIdParams,
     OccurrenceSearchParams,
     TaxonByIdParams,
@@ -78,3 +80,9 @@ class MycoPortalAPI:
 
     def build_media_lookup_url(self, params: MediaLookupParams) -> str:
         return self._build_url("/api/v2/media", params.model_dump(exclude_none=True))
+
+    def build_morphology_list_url(self, params: MorphologyListParams) -> str:
+        return self._build_url("/api/v2/morphology", params.model_dump(exclude_none=True))
+
+    def build_exsiccata_list_url(self, params: ExsiccataListParams) -> str:
+        return self._build_url("/api/v2/exsiccata", params.model_dump(exclude_none=True))

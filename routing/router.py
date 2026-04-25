@@ -2,8 +2,10 @@ from __future__ import annotations
 
 from extraction.models import (
     CollectionListExtraction,
+    ExsiccataListExtraction,
     ExtractionResult,
     MediaLookupExtraction,
+    MorphologyListExtraction,
     OccurrenceByIdExtraction,
     OccurrenceSearchExtraction,
     TaxonByIdExtraction,
@@ -11,7 +13,9 @@ from extraction.models import (
 )
 from models.params import (
     CollectionListParams,
+    ExsiccataListParams,
     MediaLookupParams,
+    MorphologyListParams,
     OccurrenceByIdParams,
     OccurrenceSearchParams,
     TaxonByIdParams,
@@ -98,6 +102,25 @@ class MycoPortalRouter:
                     tid=e.tid,
                     includeSynonyms=e.include_synonyms,
                     includeChildren=e.include_children,
+                    limit=e.limit,
+                    offset=e.offset,
+                )
+            }
+
+        if plan.intent == "morphology_list":
+            e = self._expect(extraction, MorphologyListExtraction)
+            return {
+                "list_morphology": MorphologyListParams(
+                    includeStates=e.include_states,
+                    limit=e.limit,
+                    offset=e.offset,
+                )
+            }
+
+        if plan.intent == "exsiccata_list":
+            e = self._expect(extraction, ExsiccataListExtraction)
+            return {
+                "list_exsiccata": ExsiccataListParams(
                     limit=e.limit,
                     offset=e.offset,
                 )
