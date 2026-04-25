@@ -11,6 +11,8 @@ IntentType = Literal[
     "taxon_by_id",
     "collection_list",
     "media_lookup",
+    "morphology_list",
+    "exsiccata_list",
     "out_of_scope",
     "unknown",
 ]
@@ -22,6 +24,8 @@ ToolName = Literal[
     "get_taxon_by_id",
     "list_collections",
     "lookup_media",
+    "list_morphology",
+    "list_exsiccata",
 ]
 
 

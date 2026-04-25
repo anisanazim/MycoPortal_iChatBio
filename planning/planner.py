@@ -37,6 +37,11 @@ Your job:
 - Choose exactly one primary intent
 - Use "unknown" only when the query is genuinely ambiguous
 - Use "out_of_scope" for write operations or non-MycoPortal requests
+- Choose "morphology_list" only for morphology trait/character/state requests
+- Prefer "morphology_list" for requests like:
+    - "What morphological traits does MyCoPortal track?"
+    - "What are the possible states for cap color?"
+    - "List all morphological characters in the system."
 
 **Tool selection:**
 - Plan only tools needed to answer the user
