@@ -48,6 +48,7 @@
     "run_functional": false,
     "run_quality": false,
     "expected_clarification_needed": true,
+    "clarification_stage": "extractor",
     "failure_reason": "taxon_by_id identifier cannot be a decimal number"
   },
   {

@@ -1,0 +1,38 @@
+[
+  {
+    "id": "morphology_list_all_characters",
+    "query": "What morphological traits does MyCoPortal track?",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "morphology_list_states_cap_color",
+    "query": "What are the possible states for cap color?",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": ["includeStates"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "morphology_list_characters_system",
+    "query": "List all morphological characters in the system.",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "morphology_list_with_pagination",
+    "query": "List morphological characters with limit 50 and offset 100",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": ["limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  }
+]

@@ -15,6 +15,8 @@ ENDPOINT_FILE_MAP: dict[str, str] = {
     "taxon_by_id": "taxon_by_id_testdata.json",
     "collection_list": "collection_list_testdata.json",
     "media_lookup": "media_lookup_testdata.json",
+    "morphology_list": "morphology_list_testdata.json",
+    "exsiccata_list": "exsiccata_list_testdata.json",
 }
 
 

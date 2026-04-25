@@ -43,5 +43,26 @@
     "required_params": ["collectionType"],
     "run_functional": true,
     "run_quality": false
+  },
+  {
+    "id": "collection_list_active_observations",
+    "query": "Show active observation collections",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["collectionType", "limit", "offset"],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "collection_list_snapshot_observations_ambiguous",
+    "query": "List snapshot collections that contain observation data",
+    "expected_intent": "collection_list",
+    "expected_tool": "list_collections",
+    "required_params": ["managementType", "collectionType"],
+    "run_functional": false,
+    "run_quality": false,
+    "expected_clarification_needed": true,
+    "clarification_stage": "planner",
+    "failure_reason": "Snapshot plus observation wording is ambiguous and should prompt planner clarification"
   }
 ]

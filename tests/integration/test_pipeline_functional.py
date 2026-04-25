@@ -9,12 +9,14 @@ from pydantic import ValidationError
 
 from tests.fixtures.mock_context import FakeResponseContext
 from extraction.models import (
-    OccurrenceSearchExtraction,
-    OccurrenceByIdExtraction,
-    TaxonomySearchExtraction,
-    TaxonByIdExtraction,
     CollectionListExtraction,
+    ExsiccataListExtraction,
     MediaLookupExtraction,
+    MorphologyListExtraction,
+    OccurrenceByIdExtraction,
+    OccurrenceSearchExtraction,
+    TaxonByIdExtraction,
+    TaxonomySearchExtraction,
 )
 from tests.data.loader import load_dataset_from_env
 
@@ -26,6 +28,8 @@ VALID_INTENTS = {
     "taxon_by_id",
     "collection_list",
     "media_lookup",
+    "morphology_list",
+    "exsiccata_list",
     "out_of_scope",
     "unknown",
 }
@@ -136,6 +140,17 @@ def _assert_extractor_invariants(extraction, intent: str) -> None:
 
     elif intent == "media_lookup":
         assert isinstance(extraction, MediaLookupExtraction)
+        assert extraction.limit > 0
+        assert extraction.offset >= 0
+
+    elif intent == "morphology_list":
+        assert isinstance(extraction, MorphologyListExtraction)
+        assert extraction.include_states in (0, 1)
+        assert extraction.limit > 0
+        assert extraction.offset >= 0
+
+    elif intent == "exsiccata_list":
+        assert isinstance(extraction, ExsiccataListExtraction)
         assert extraction.limit > 0
         assert extraction.offset >= 0
 
@@ -258,8 +273,52 @@ async def test_clarification_case_requests_followup(pipeline: dict[str, object],
     extractor = pipeline["extractor"]
 
     query = str(case["query"])
+    expected_stage = str(case.get("clarification_stage", "extractor")).strip().lower()
+
     plan = await planner.plan(query)
     _assert_planner_invariants(plan)
+
+    if expected_stage not in {"planner", "extractor", "any"}:
+        raise ValueError(f"Unsupported clarification_stage '{expected_stage}'")
+
+    if expected_stage == "planner":
+        allure.attach(
+            json.dumps(
+                {
+                    "query": query,
+                    "expected_stage": expected_stage,
+                    "planned_intent": plan.intent,
+                    "planner_clarification_needed": plan.clarification_needed,
+                    "planner_clarification_question": plan.clarification_question,
+                },
+                indent=2,
+            ),
+            name="clarification_case",
+            attachment_type=allure.attachment_type.JSON,
+        )
+        assert plan.clarification_needed is True
+        assert plan.clarification_question
+        return
+
+    if expected_stage == "any" and plan.clarification_needed:
+        allure.attach(
+            json.dumps(
+                {
+                    "query": query,
+                    "expected_stage": expected_stage,
+                    "planned_intent": plan.intent,
+                    "clarification_source": "planner",
+                    "clarification_needed": plan.clarification_needed,
+                    "clarification_question": plan.clarification_question,
+                },
+                indent=2,
+            ),
+            name="clarification_case",
+            attachment_type=allure.attachment_type.JSON,
+        )
+        assert plan.clarification_question
+        return
+
     extraction = await extractor.extract(query, plan)
     _assert_extractor_invariants(extraction, plan.intent)
 
@@ -267,7 +326,9 @@ async def test_clarification_case_requests_followup(pipeline: dict[str, object],
         json.dumps(
             {
                 "query": query,
+                "expected_stage": expected_stage,
                 "planned_intent": plan.intent,
+                "clarification_source": "extractor",
                 "clarification_needed": extraction.clarification_needed,
                 "clarification_question": extraction.clarification_question,
             },

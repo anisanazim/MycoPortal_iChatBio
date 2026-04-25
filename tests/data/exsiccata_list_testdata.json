@@ -1,0 +1,18 @@
+[
+    {
+        "query": "list all exsiccata",
+        "expected_intent": "exsiccata_list",
+        "expected_entities": {
+            "limit": 100,
+            "offset": 0
+        }
+    },
+    {
+        "query": "show me the first 5 exsiccata",
+        "expected_intent": "exsiccata_list",
+        "expected_entities": {
+            "limit": 5,
+            "offset": 0
+        }
+    }
+]

@@ -135,3 +135,14 @@ class MediaLookupParams(BaseModel):
     includeChildren: int = Field(default=0, ge=0, le=1)
     limit: int = Field(default=100, ge=1, le=1000)
     offset: int = Field(default=0, ge=0)
+
+
+class MorphologyListParams(BaseModel):
+    includeStates: int = Field(default=0, ge=0, le=1)
+    limit: int = Field(default=100, ge=1, le=1000)
+    offset: int = Field(default=0, ge=0)
+
+
+class ExsiccataListParams(BaseModel):
+    limit: int = Field(default=100, ge=1, le=1000)
+    offset: int = Field(default=0, ge=0)

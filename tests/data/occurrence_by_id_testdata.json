@@ -16,8 +16,8 @@
     "required_params": ["identifier"],
     "run_functional": false,
     "run_quality": false,
-    "should_fail_validation": true,
-    "validation_failure_point": "param_schema_validation",
+    "expected_clarification_needed": true,
+    "clarification_stage": "extractor",
     "failure_reason": "Identifier must include UUID hyphen separators"
   },
   {

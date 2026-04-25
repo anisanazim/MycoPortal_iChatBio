@@ -73,7 +73,7 @@
   "run_functional": false,
   "run_quality": false,
   "test_category": "edge_case_empty_results",
-  "failure_reason": "Valid query, no records in MycoPortal - tests empty result handling"
+  "failure_reason": "Valid query, no records in MyCoPortal - tests empty result handling"
 },
 {
     "id": "occurrence_by_id_numeric",
@@ -177,9 +177,11 @@
   "expected_intent": "collection_list",
   "expected_tool": "list_collections",
   "required_params": ["managementType", "collectionType"],
-  "run_functional": true,        
-  "run_quality": true,            
-  "expected_clarification_needed": false 
+  "run_functional": false,
+  "run_quality": false,
+  "expected_clarification_needed": true,
+  "clarification_stage": "planner",
+  "failure_reason": "Snapshot plus observation wording is ambiguous and should prompt planner clarification"
  },
  {
     "id": "collection_pagination_first_20",
@@ -237,5 +239,41 @@
     "should_fail_validation": true,
     "validation_failure_point": "must_call_tools_mismatch",
     "failure_reason": "Expected tool (search_occurrences) does not match what planner selected (search_taxonomy)"
+  },
+  {
+    "id": "morphology_list_all_characters",
+    "query": "What morphological traits does MyCoPortal track?",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "morphology_list_states_cap_color",
+    "query": "What are the possible states for cap color?",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": ["includeStates"],
+    "run_functional": true,
+    "run_quality": true
+  },
+  {
+    "id": "morphology_list_characters_system",
+    "query": "List all morphological characters in the system.",
+    "expected_intent": "morphology_list",
+    "expected_tool": "list_morphology",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": false
+  },
+  {
+    "id": "exsiccata_list_smoke",
+    "query": "list all exsiccata",
+    "expected_intent": "exsiccata_list",
+    "expected_tool": "list_exsiccata",
+    "required_params": [],
+    "run_functional": true,
+    "run_quality": false
   }
 ]
