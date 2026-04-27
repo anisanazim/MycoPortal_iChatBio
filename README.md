@@ -15,11 +15,11 @@ Natural language fungal biodiversity agent built on iChatBio, backed by the Myco
 
 The agent accepts a natural-language query and runs a five-stage pipeline:
 
-1. **Planner** — detects intent and selects tools
-2. **Extractor** — pulls typed parameters from user text
-3. **Resolver** — enriches identifiers when needed
-4. **Router** — maps extraction output to API parameter models
-5. **Executor** — calls MycoPortal endpoints and returns artifacts
+1. **Planner** - detects intent and selects tools
+2. **Extractor** - pulls typed parameters from user text
+3. **Resolver** - enriches identifiers when needed
+4. **Router** - maps extraction output to API parameter models
+5. **Executor** - calls MycoPortal endpoints and returns artifacts
 
 ## Supported Intents and Endpoints
 
@@ -42,7 +42,7 @@ MycoPortal_iChatBio/
 ├── agent.py                               # Main MycoPortal agent definition
 ├── server.py                              # HTTP server entrypoint (port 9998)
 ├── requirements.txt                       # Python dependencies
-├── env.yaml                               # Environment config (API keys) — gitignored
+├── env.yaml                               # Environment config (API keys) - gitignored
 ├── Dockerfile                             # Container build definition
 ├── README.md
 ├── .gitignore
@@ -60,7 +60,7 @@ MycoPortal_iChatBio/
 ├── planning/                # Intent classification + tool planning
 │   ├── planner.py
 │   ├── models.py
-│   └── capabilities/        # One .md per tool — loaded into planner prompt
+│   └── capabilities/        # One .md per tool - loaded into planner prompt
 │
 ├── extraction/              # Extractor schemas + field extraction logic
 │   ├── extractor.py
@@ -117,7 +117,7 @@ MYCOPORTAL_API_BASE_URL: https://mycoportal.org/portal
 MYCOPORTAL_HTTP_TIMEOUT: 30
 ```
 
-> `env.yaml` is gitignored — never commit secrets to the repository.
+> `env.yaml` is gitignored - never commit secrets to the repository.
 
 ---
 
@@ -154,7 +154,7 @@ docker build -t mycoportal-agent:1.1 .
 
 `env.yaml` is gitignored and excluded from the Docker build context. Secrets must be injected at runtime.
 
-**Option 1 — environment variables (recommended):**
+**Option 1 - environment variables (recommended):**
 
 ```bash
 docker run -p 29209:9998 \
@@ -163,7 +163,7 @@ docker run -p 29209:9998 \
   mycoportal-agent:1.1
 ```
 
-**Option 2 — `.env` file:**
+**Option 2 - `.env` file:**
 
 `--env-file` requires `KEY=value` format, not YAML. Convert your `env.yaml` first:
 
@@ -179,7 +179,7 @@ docker run -p 29209:9998 --env-file .env mycoportal-agent:1.1
 
 > Add `.env` to `.gitignore` so it is never committed.
 
-**Option 3 — volume mount:**
+**Option 3 - volume mount:**
 
 ```bash
 docker run -p 29209:9998 \
@@ -204,7 +204,7 @@ docker run -p 29209:9998 \
 
 ## Testing
 
-### Run smoke tests (fastest — good for PRs)
+### Run smoke tests (fastest - good for PRs)
 
 ```bash
 pytest -m "smoke and functional" --alluredir=allure-results
